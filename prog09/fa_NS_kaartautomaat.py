@@ -111,11 +111,13 @@ Hieronder staan de tests voor je code -- daaraan mag je niets wijzigen!
 """
 
 
-def test_inlezen_beginstation():
-    stations = ['Schagen', 'Heerhugowaard', 'Alkmaar', 'Castricum', 'Zaandam', 'Amsterdam Sloterdijk',
-                'Amsterdam Centraal', 'Amsterdam Amstel', 'Utrecht Centraal', "’s-Hertogenbosch", 'Eindhoven', 'Weert',
-                'Roermond', 'Sittard', 'Maastricht']
+def __stations():
+    return ['Schagen', 'Heerhugowaard', 'Alkmaar', 'Castricum', 'Zaandam', 'Amsterdam Sloterdijk',
+            'Amsterdam Centraal', 'Amsterdam Amstel', 'Utrecht Centraal', "’s-Hertogenbosch", 'Eindhoven', 'Weert',
+            'Roermond', 'Sittard', 'Maastricht']
 
+
+def test_inlezen_beginstation():
     case = collections.namedtuple('case', 'simulated_input expected_start')
     testcases = [ case(["asfasf", "Schagen", "Alkmaar"], "Schagen"),
                   case(["Sittard" ], "Sittard"),
@@ -128,7 +130,7 @@ def test_inlezen_beginstation():
         builtins.input = lambda prompt: simulated_input.pop()
 
         try:
-            beginstation = inlezen_beginstation(stations)
+            beginstation = inlezen_beginstation(__stations())
         except IndexError:
             beginstation = 'geen return'
         finally:
@@ -138,10 +140,6 @@ def test_inlezen_beginstation():
 
 
 def test_inlezen_eindstation():
-    stations = ['Schagen', 'Heerhugowaard', 'Alkmaar', 'Castricum', 'Zaandam', 'Amsterdam Sloterdijk',
-                'Amsterdam Centraal', 'Amsterdam Amstel', 'Utrecht Centraal', "’s-Hertogenbosch", 'Eindhoven', 'Weert',
-                'Roermond', 'Sittard', 'Maastricht']
-
     case = collections.namedtuple('case', 'simulated_input start expected_stop')
     testcases = [ case(["asfasf", "Schagen", "Maastricht" ], "Schagen", "Maastricht"),
                   case(["asfsdf", "Schagen", "Alkmaar", "asfdfa", "Maastricht" ], "Alkmaar", "Maastricht"),
@@ -154,7 +152,7 @@ def test_inlezen_eindstation():
         builtins.input = lambda prompt="": simulated_input.pop()
 
         try:
-            eindstation = inlezen_eindstation(stations, test.start)
+            eindstation = inlezen_eindstation(__stations(), test.start)
         except IndexError:
             eindstation = 'geen return'
         finally:
@@ -164,10 +162,6 @@ def test_inlezen_eindstation():
 
 
 def test_omroepen_reis():
-    stations = ['Schagen', 'Heerhugowaard', 'Alkmaar', 'Castricum', 'Zaandam', 'Amsterdam Sloterdijk',
-                'Amsterdam Centraal', 'Amsterdam Amstel', 'Utrecht Centraal', "’s-Hertogenbosch", 'Eindhoven', 'Weert',
-                'Roermond', 'Sittard', 'Maastricht']
-
     case = collections.namedtuple('case', 'start stop expected_start_rank, expected_stop_rank, expected_distance expected_price')
     testcases = [ case("Schagen", "Maastricht", "1e station", "15e station", "14 station", "70 euro"),
                   case("Alkmaar", "Weert", "3e station", "12e station", "9 station", "45 euro"),
@@ -175,7 +169,7 @@ def test_omroepen_reis():
 
 
     for test in testcases:
-        omroepbericht = omroepen_reis(stations, test.start, test.stop)
+        omroepbericht = omroepen_reis(__stations(), test.start, test.stop)
         assert type(omroepbericht) is str, f"Fout: omroepen_reis(<stations>, {test.start}, {test.stop}) levert {omroepbericht} ipv string"
 
         assertmsg = "Fout: omroepen_reis(<stations>, {}, {}) bevat niet de vereiste {}-tekst '{}'. Jouw returnwaarde: \n<<\n"+omroepbericht+"\n>>"
