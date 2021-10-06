@@ -78,7 +78,7 @@ def __my_assert_args(function, args, expected_output, check_type=False):
         assert output == expected_output, msg
 
 
-def test_seizoen():
+def test_hoogvliegers():
     case = collections.namedtuple('case', 'result_dictionary expected_output')
 
     testcases = [case({"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Leo": 2.5, "Martin": 8.0, "Gera": 7.5, "Jan": 9.2, "David": 9.0, "Sanne": 8.2, "Brian": 10.0 }, {'Gerald': 9.5, 'Jan': 9.2, 'Brian': 10.0}),
@@ -92,7 +92,7 @@ def test_seizoen():
 
 def __run_tests():
     """ Test alle functies. """
-    test_functions = [ test_seizoen ]
+    test_functions = [ test_hoogvliegers ]
 
     try:
         for test_function in test_functions:
