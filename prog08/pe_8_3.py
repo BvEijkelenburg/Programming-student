@@ -24,8 +24,8 @@ def hoogvliegers(dict_studenten_cijfers):
     functie moet een nieuwe dictionary returnen, met daarin de namen (en
     het cijfer) van studenten die een cijfer hoger dan 9,0 hebben.
 
-    Dus {"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Martin": 9.0} levert
-    als antwoord: {"Gerald": 9.5, "Martin": 9.0 }]
+    Dus {"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Martin": 9.1} levert
+    als antwoord: {"Gerald": 9.5, "Martin": 9.1 }]
 
     Args:
         dict_studenten_cijfers (dict): dictionary met resultaten
