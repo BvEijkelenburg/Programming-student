@@ -36,6 +36,7 @@ def monopolyworp():
     """
     return
 
+
 def development_code():
     # Plaats hieronder eventueel code om je functies tussentijds te testen. Bijv:
     print("Monopolyworp(en): ", monopolyworp())
