@@ -17,24 +17,6 @@ Voeg commentaar toe om je code toe te lichten.
 """
 
 
-def gemiddelde_van_alle_studenten(studentencijfers):
-    """
-    Deze functie ontvangt een lijst studentcijfers, waarbij de lijst per
-    student een sublijst bevat met drie resultaten. Voor een resultaat geldt dat
-    0 <= resultaat <= 100). Voorbeeld:
-
-        [ [17, 16, 30], [18, 92, 88] ]
-
-    Bepaal het totaalgemiddelde van van alle resultaten van alle studenten.
-
-    Args:
-        studentencijfers (list): studentcijfers met per student een sublijst met  drie resultaten
-    Returns:
-        float: het totaalgemiddelde van alle resultaten van alle studenten
-    """
-    return
-
-
 def gemiddelde_per_student(studentencijfers):
     """
     Deze functie ontvangt een lijst studentcijfers, waarbij de lijst per
@@ -52,6 +34,24 @@ def gemiddelde_per_student(studentencijfers):
         studentencijfers (list): studentcijfers met per student een sublijst met  drie resultaten
     Returns:
         list: per student het gemiddelde cijfer van de drie resultaten
+    """
+    return
+
+
+def gemiddelde_van_alle_studenten(studentencijfers):
+    """
+    Deze functie ontvangt een lijst studentcijfers, waarbij de lijst per
+    student een sublijst bevat met drie resultaten. Voor een resultaat geldt dat
+    0 <= resultaat <= 100). Voorbeeld:
+
+        [ [17, 16, 30], [18, 92, 88] ]
+
+    Bepaal het totaalgemiddelde van van alle resultaten van alle studenten.
+
+    Args:
+        studentencijfers (list): studentcijfers met per student een sublijst met  drie resultaten
+    Returns:
+        float: het totaalgemiddelde van alle resultaten van alle studenten
     """
     return
 
@@ -101,7 +101,7 @@ def __my_assert_args(function, args, expected_output, check_type=False):
 
 def test_gemiddelde_per_student():
     for test in testcases():
-        __my_assert_args(gemiddelde_van_alle_studenten, (test.studentgradeslist,), test.overall_average)
+        __my_assert_args(gemiddelde_per_student, (test.studentgradeslist,), test.average_per_student)
 
 
 def test_gemiddelde_van_alle_studenten():
