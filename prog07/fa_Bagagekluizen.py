@@ -124,6 +124,10 @@ def __my_assert_args(function, args, expected_output, check_type=False):
         assert output == expected_output, msg
 
 
+def __inputIndexError():
+    raise AssertionError(f"Fout: er werd in de functie vaker om input gevraagd dan verwacht.")
+
+
 def __my_test_file():
     return "fa_testkluizen.txt"
 
@@ -188,7 +192,7 @@ def test_nieuwe_kluis():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
 
         try:
             output = function()
@@ -208,8 +212,6 @@ def test_nieuwe_kluis():
 
         except AssertionError as ae:
             raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
-        except IndexError:
-            raise AssertionError(f"Fout: er werd in de functie vaker om input gevraagd dan verwacht. Gesimuleerde input: {test.simulated_input}")
         finally:
             builtins.input = original_input
             builtins.open = original_open
@@ -232,14 +234,12 @@ def test_kluis_openen():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
 
         try:
             __my_assert_args(function, (), test.expected_output, check_type=True)
         except AssertionError as ae:
             raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
-        except IndexError:
-            raise AssertionError(f"Fout: er werd in de functie vaker om input gevraagd dan verwacht. Gesimuleerde input: {test.simulated_input}")
         finally:
             builtins.input = original_input
             builtins.open = original_open
@@ -264,7 +264,7 @@ def test_kluis_teruggeven():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
 
         try:
             __my_assert_args(function, (), test.expected_output, check_type=True)
@@ -280,8 +280,6 @@ def test_kluis_teruggeven():
 
         except AssertionError as ae:
             raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
-        except IndexError:
-            raise AssertionError(f"Fout: er werd in de functie vaker om input gevraagd dan verwacht. Gesimuleerde input: {test.simulated_input}")
         finally:
             builtins.input = original_input
             builtins.open = original_open
