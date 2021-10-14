@@ -111,6 +111,33 @@ Hieronder staan de tests voor je code -- daaraan mag je niets wijzigen!
 """
 
 
+def __my_assert_args(function, args, expected_output, check_type=False):
+    """
+    Controleer of gegeven functie met gegeven argumenten het verwachte resultaat oplevert.
+    Optioneel wordt ook het return-type gecontroleerd.
+    """
+    argstr = str(args).replace(',)', ')')
+    output = function(*args)
+
+    # Controleer eerst het return-type (optioneel)
+    if check_type:
+        msg = f"Fout: {function.__name__}{argstr} geeft geen {type(expected_output).__name__} terug als return-type"
+        assert type(output) is type(expected_output), msg
+
+    # Controleer of de functie-uitvoer overeenkomt met de gewenste uitvoer
+    if str(expected_output) == str(output):
+        msg = f"Fout: {function.__name__}{argstr} geeft {output} ({type(output).__name__}) " \
+              f"in plaats van {expected_output} (type {type(expected_output).__name__})"
+    else:
+        msg = f"Fout: {function.__name__}{argstr} geeft {output} in plaats van {expected_output}"
+
+    if type(expected_output) is float and isinstance(output, (int, float, complex)):
+        # Vergelijk bij float als return-type op 7 decimalen om afrondingsfouten te omzeilen
+        assert round(output - expected_output, 7) == 0, msg
+    else:
+        assert output == expected_output, msg
+
+
 def __stations():
     return ['Schagen', 'Heerhugowaard', 'Alkmaar', 'Castricum', 'Zaandam', 'Amsterdam Sloterdijk',
             'Amsterdam Centraal', 'Amsterdam Amstel', 'Utrecht Centraal', "’s-Hertogenbosch", 'Eindhoven', 'Weert',
@@ -121,51 +148,47 @@ def __out_of_input_error():
     raise AssertionError("Fout: er werd in de functie vaker om input gevraagd dan verwacht.")
 
 
+def __check_testcase(simulated_input, function, function_args, expected_output):
+    original_input = builtins.input
+    simulated_input_copy = simulated_input.copy()
+    simulated_input.reverse()
+    builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
+
+    try:
+        __my_assert_args(function, function_args, expected_output)
+    except AssertionError as ae:
+        raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {simulated_input_copy}.") from ae
+    finally:
+        builtins.input = original_input
+
+
 def test_inlezen_beginstation():
+    function = inlezen_beginstation
+
     case = collections.namedtuple('case', 'simulated_input expected_start')
     testcases = [ case(["asfasf", "Schagen", "Alkmaar"], "Schagen"),
                   case(["Sittard" ], "Sittard"),
                   case(["Alkmr", "Alkmeer", "Alkmaar"], "Alkmaar") ]
 
     for test in testcases:
-        original_input = builtins.input
-        simulated_input = test.simulated_input.copy()
-        simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
-
-        try:
-            beginstation = inlezen_beginstation(__stations())
-            msg = f"Fout: inlezen_beginstation(<stationslist>) geeft {beginstation} ipv {test.expected_start}"
-            assert beginstation == test.expected_start, msg
-        except AssertionError as ae:
-            raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
-        finally:
-            builtins.input = original_input
+        __check_testcase(test.simulated_input, function, (__stations(),), test.expected_start)
 
 
 def test_inlezen_eindstation():
+    function = inlezen_eindstation
+
     case = collections.namedtuple('case', 'simulated_input start expected_stop')
     testcases = [ case(["asfasf", "Schagen", "Maastricht" ], "Schagen", "Maastricht"),
                   case(["asfsdf", "Schagen", "Alkmaar", "asfdfa", "Maastricht" ], "Alkmaar", "Maastricht"),
                   case(["Groningen", "Schagen", "Dedemsvaart", "Zaltbommel", "Eindhoven", "Den Briel" ], "Alkmaar", "Eindhoven")]
 
     for test in testcases:
-        original_input = builtins.input
-        simulated_input = test.simulated_input.copy()
-        simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
-
-        try:
-            eindstation = inlezen_eindstation(__stations(), test.start)
-            msg = f"Fout: inlezen_eindstation(<stationslist>, '{test.start}') geeft {eindstation} ipv {test.expected_stop}"
-            assert eindstation == test.expected_stop, msg
-        except AssertionError as ae:
-            raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
-        finally:
-            builtins.input = original_input
+        __check_testcase(test.simulated_input, function, (__stations(), test.start), test.expected_stop)
 
 
 def test_omroepen_reis():
+    function = omroepen_reis
+
     case = collections.namedtuple('case', 'start stop expected_start_rank, expected_stop_rank, expected_distance expected_price')
     testcases = [ case("Schagen", "Maastricht", "1e station", "15e station", "14 station", "70 euro"),
                   case("Alkmaar", "Weert", "3e station", "12e station", "9 station", "45 euro"),
@@ -173,10 +196,10 @@ def test_omroepen_reis():
 
 
     for test in testcases:
-        omroepbericht = omroepen_reis(__stations(), test.start, test.stop)
-        assert type(omroepbericht) is str, f"Fout: omroepen_reis(<stations>, {test.start}, {test.stop}) levert {omroepbericht} ipv string"
+        omroepbericht = function(__stations(), test.start, test.stop)
+        assert type(omroepbericht) is str, f"Fout: omroepen_reis({__stations()}, {test.start}, {test.stop}) levert {type(omroepbericht).__name__} ipv string"
 
-        assertmsg = "Fout: omroepen_reis(<stations>, {}, {}) bevat niet de vereiste {}-tekst '{}'. Jouw returnwaarde: \n<<\n"+omroepbericht+"\n>>"
+        assertmsg = f"Fout: omroepen_reis({__stations()}, {{}}, {{}}) bevat niet de vereiste {{}}-tekst '{{}}'. Jouw returnwaarde: \n<<\n"+omroepbericht+"\n>>"
         assert test.expected_start_rank in omroepbericht, assertmsg.format(test.start, test.stop, 'rangnummer-beginstation', test.expected_start_rank)
         assert test.expected_stop_rank in omroepbericht, assertmsg.format(test.start, test.stop, 'rangnummer-eindstation', test.expected_stop_rank)
         assert test.expected_distance in omroepbericht, assertmsg.format(test.start, test.stop, 'afstand', test.expected_distance)
