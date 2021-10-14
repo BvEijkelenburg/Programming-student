@@ -117,6 +117,10 @@ def __stations():
             'Roermond', 'Sittard', 'Maastricht']
 
 
+def __out_of_input_error():
+    raise AssertionError("Fout: er werd in de functie vaker om input gevraagd dan verwacht.")
+
+
 def test_inlezen_beginstation():
     case = collections.namedtuple('case', 'simulated_input expected_start')
     testcases = [ case(["asfasf", "Schagen", "Alkmaar"], "Schagen"),
@@ -127,38 +131,38 @@ def test_inlezen_beginstation():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt: simulated_input.pop()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
 
         try:
             beginstation = inlezen_beginstation(__stations())
-        except IndexError:
-            beginstation = 'geen return'
+            msg = f"Fout: inlezen_beginstation(<stationslist>) geeft {beginstation} ipv {test.expected_start}"
+            assert beginstation == test.expected_start, msg
+        except AssertionError as ae:
+            raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
         finally:
             builtins.input = original_input
-
-        assert beginstation == test.expected_start, f"Fout: inlezen_beginstation(<stationslist>) geeft {beginstation} ipv {test.expected_start} (gesimuleerde input: {test.simulated_input})"
 
 
 def test_inlezen_eindstation():
     case = collections.namedtuple('case', 'simulated_input start expected_stop')
     testcases = [ case(["asfasf", "Schagen", "Maastricht" ], "Schagen", "Maastricht"),
                   case(["asfsdf", "Schagen", "Alkmaar", "asfdfa", "Maastricht" ], "Alkmaar", "Maastricht"),
-                  case(["Groningen", "Schagen", "Dedemsvaart", "Zaltbommel" ], "Alkmaar", 'geen return')]
+                  case(["Groningen", "Schagen", "Dedemsvaart", "Zaltbommel", "Eindhoven", "Den Briel" ], "Alkmaar", "Eindhoven")]
 
     for test in testcases:
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
 
         try:
             eindstation = inlezen_eindstation(__stations(), test.start)
-        except IndexError:
-            eindstation = 'geen return'
+            msg = f"Fout: inlezen_eindstation(<stationslist>, '{test.start}') geeft {eindstation} ipv {test.expected_stop}"
+            assert eindstation == test.expected_stop, msg
+        except AssertionError as ae:
+            raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
         finally:
             builtins.input = original_input
-
-        assert eindstation == test.expected_stop, f"Fout: inlezen_eindstation(<stationslist>, '{test.start}') geeft {eindstation} ipv {test.expected_stop} (gesimuleerde input: {test.simulated_input})"
 
 
 def test_omroepen_reis():
