@@ -124,8 +124,8 @@ def __my_assert_args(function, args, expected_output, check_type=False):
         assert output == expected_output, msg
 
 
-def __inputIndexError():
-    raise AssertionError(f"Fout: er werd in de functie vaker om input gevraagd dan verwacht.")
+def __out_of_input_error():
+    raise AssertionError("Fout: er werd in de functie vaker om input gevraagd dan verwacht.")
 
 
 def __my_test_file():
@@ -192,7 +192,7 @@ def test_nieuwe_kluis():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
 
         try:
             output = function()
@@ -234,7 +234,7 @@ def test_kluis_openen():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
 
         try:
             __my_assert_args(function, (), test.expected_output, check_type=True)
@@ -264,7 +264,7 @@ def test_kluis_teruggeven():
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
         simulated_input.reverse()
-        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __inputIndexError()
+        builtins.input = lambda prompt="": simulated_input.pop() if len(simulated_input) > 0 else __out_of_input_error()
 
         try:
             __my_assert_args(function, (), test.expected_output, check_type=True)
