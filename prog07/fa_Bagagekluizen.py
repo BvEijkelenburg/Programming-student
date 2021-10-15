@@ -222,6 +222,7 @@ def test_kluis_openen():
 
     case = collections.namedtuple('case', 'safes simulated_input expected_output')
     testcases = [case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
+                 case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["10", "6754"], False)]
 
     for test in testcases:
