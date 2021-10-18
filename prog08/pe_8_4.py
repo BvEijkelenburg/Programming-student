@@ -107,6 +107,13 @@ def __create_test_file(tickers, testfile=__my_test_file()):
     print("Klaar.")
 
 
+def __create_fake_open(original_open):
+    def fake_open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        return original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors,
+                      newline=newline, closefd=closefd, opener=opener)
+    return fake_open
+
+
 def __my_assert_args(function, args, expected_output, check_type=False):
     """
     Controleer of gegeven functie met gegeven argumenten het verwachte resultaat oplevert.
@@ -147,8 +154,7 @@ def test_tickers_to_dict():
         __create_test_file(test.tickers)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         try:
             __my_assert_args(function, (__my_test_file(),), test.tickers, check_type=True)
@@ -169,8 +175,7 @@ def test_name_to_symbol():
         __create_test_file(test.tickers)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         try:
             __my_assert_args(function, (test.company_name, tickers_to_dict(__my_test_file())), test.expected_symbol, check_type=True)
@@ -191,8 +196,7 @@ def test_symbol_to_name():
         __create_test_file(test.tickers)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         try:
             __my_assert_args(function, (test.ticker_symbol, tickers_to_dict(__my_test_file())), test.expected_company, check_type=True)
