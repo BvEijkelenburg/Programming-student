@@ -148,6 +148,13 @@ def __create_test_file(safes, testfile=__my_test_file()):
     print("Klaar.")
 
 
+def __create_fake_open(original_open):
+    def fake_open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        return original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors,
+                      newline=newline, closefd=closefd, opener=opener)
+    return fake_open
+
+
 def test_aantal_kluizen_vrij():
     function = aantal_kluizen_vrij
 
@@ -161,8 +168,7 @@ def test_aantal_kluizen_vrij():
         __create_test_file(test.safes)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         try:
             expected_output = 12 - len(test.safes)
@@ -186,8 +192,7 @@ def test_nieuwe_kluis():
         __create_test_file(test.safes)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
@@ -229,8 +234,7 @@ def test_kluis_openen():
         __create_test_file(test.safes)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
@@ -259,8 +263,7 @@ def test_kluis_teruggeven():
         __create_test_file(test.safes)
 
         original_open = builtins.open
-        builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-            original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+        builtins.open = __create_fake_open(original_open)
 
         original_input = builtins.input
         simulated_input = test.simulated_input.copy()
