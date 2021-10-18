@@ -54,7 +54,7 @@ def pretty_print():
 
 def development_code():
     # Plaats hieronder eventueel code om je functies tussentijds te testen. Bijv:
-    print("Klanten uit bestand:\n", pretty_print())
+    print("Klanten uit bestand:\n", pretty_print(), sep="")
 
 
 def module_runner():
@@ -70,6 +70,13 @@ Hieronder staan de tests voor je code -- daaraan mag je niets wijzigen!
 
 def __my_test_file():
     return "pe_6_2_generated.txt"
+
+
+def __create_fake_open(original_open):
+    def fake_open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        return original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors,
+                      newline=newline, closefd=closefd, opener=opener)
+    return fake_open
 
 
 def test_pretty_print():
@@ -94,8 +101,7 @@ def test_pretty_print():
     print("\nKlaar... de test wordt nu uitgevoerd...")
 
     original_open = builtins.open
-    builtins.open = lambda file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None: \
-        original_open(__my_test_file(), mode=mode, buffering=buffering, encoding=encoding, errors=errors, newline=newline, closefd=closefd, opener=opener)
+    builtins.open = __create_fake_open(original_open)
 
     function_result = pretty_print()
     builtins.open = original_open
