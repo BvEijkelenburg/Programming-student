@@ -189,10 +189,10 @@ def test_inlezen_eindstation():
 def test_omroepen_reis():
     function = omroepen_reis
 
-    case = collections.namedtuple('case', 'start stop expected_start_rank, expected_stop_rank, expected_distance expected_price')
-    testcases = [ case("Schagen", "Maastricht", "1e station", "15e station", "14 station", "70 euro"),
-                  case("Alkmaar", "Weert", "3e station", "12e station", "9 station", "45 euro"),
-                  case("Heerhugowaard", "Sittard", "2e station", "14e station", "12 station", "60 euro") ]
+    case = collections.namedtuple('case', 'start stop expected_start_rank, expected_transition_rank, expected_stop_rank, expected_distance expected_price')
+    testcases = [ case("Schagen", "Maastricht", "1e station", "- Heerhugowaard\n- Alkmaar\n- Castricum\n- Zaandam\n- Amsterdam Sloterdijk\n- Amsterdam Centraal\n- Amsterdam Amstel\n- Utrecht Centraal\n- ’s-Hertogenbosch\n- Eindhoven\n- Weert\n- Roermond\n- Sittard", "15e station", "14 station", "70 euro"),
+                  case("Alkmaar", "Weert", "3e station", "- Castricum\n- Zaandam\n- Amsterdam Sloterdijk\n- Amsterdam Centraal\n- Amsterdam Amstel\n- Utrecht Centraal\n- ’s-Hertogenbosch\n- Eindhoven", "12e station", "9 station", "45 euro"),
+                  case("Heerhugowaard", "Sittard", "- Alkmaar\n- Castricum\n- Zaandam\n- Amsterdam Sloterdijk\n- Amsterdam Centraal\n- Amsterdam Amstel\n- Utrecht Centraal\n- ’s-Hertogenbosch\n- Eindhoven\n- Weert\n- Roermond\n", "2e station", "14e station", "12 station", "60 euro") ]
 
 
     for test in testcases:
@@ -201,6 +201,7 @@ def test_omroepen_reis():
 
         assertmsg = f"Fout: omroepen_reis({__stations()}, {{}}, {{}}) bevat niet de vereiste {{}}-tekst '{{}}'. Jouw returnwaarde: \n<<\n"+omroepbericht+"\n>>"
         assert test.expected_start_rank in omroepbericht, assertmsg.format(test.start, test.stop, 'rangnummer-beginstation', test.expected_start_rank)
+        assert test.expected_transition_rank in omroepbericht, assertmsg.format(test.start, test.stop, 'lijst met tussenstations:\n', test.expected_transition_rank)
         assert test.expected_stop_rank in omroepbericht, assertmsg.format(test.start, test.stop, 'rangnummer-eindstation', test.expected_stop_rank)
         assert test.expected_distance in omroepbericht, assertmsg.format(test.start, test.stop, 'afstand', test.expected_distance)
         assert test.expected_price in omroepbericht, assertmsg.format(test.start, test.stop, 'prijs', test.expected_price)
