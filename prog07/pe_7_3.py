@@ -5,7 +5,7 @@ import traceback, collections
 
 """
 Programming
-Practice Exercise 7.2
+Practice Exercise 7.3
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
