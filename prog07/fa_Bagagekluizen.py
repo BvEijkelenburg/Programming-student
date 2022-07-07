@@ -132,6 +132,15 @@ def __my_test_file():
     return "fa_testkluizen.txt"
 
 
+def __check_line_in_testfile(line, testfile=__my_test_file()):
+    with open(testfile, 'r') as dummy_file:
+        for file_line in dummy_file.readlines():
+            if line.strip() == file_line.strip():
+                return True
+
+    return False
+
+
 def __create_test_file(safes, testfile=__my_test_file()):
     kluis_mv_ev = 'kluis' if len(safes) == 1 else 'kluizen'
     print(f"Voor testdoeleinden wordt bestand {testfile} aangemaakt met {len(safes)} {kluis_mv_ev}... ", end="")
@@ -186,6 +195,10 @@ def test_nieuwe_kluis():
                        (2, "0000"), (4, "0000"), (6, "0000"), (8, "0000"), (10, "0000"), (12, "0000")), ["geheim"], [-2]),
                  case(((1, "0000"), (3, "0000"), (5, "0000"), (7, "0000"), (9, "0000"), (11, "0000"),
                        (2, "0000"), (4, "0000"), (6, "0000"), (8, "0000"), (12, "0000")), ["geheim"], [10]),
+                 case(((1, "0000"), (3, "0000"), (5, "0000"), (8, "0000"), (10, "0000"), (12, "0000"),
+                       (2, "0000"), (4, "0000"), (6, "0000"), (9, "0000"), (11, "0000")), ["geheim"], [7]),
+                 case(((2, "0000"), (4, "0000"), (6, "0000"), (8, "0000"), (10, "0000"), (12, "0000"),
+                       (3, "0000"), (5, "0000"), (7, "0000"), (9, "0000"), (11, "0000")), ["geheim"], [1]),
                  case(((1, "0000"), (3, "0000")), ["abc"], [-1])]
 
     for test in testcases:
@@ -202,7 +215,7 @@ def test_nieuwe_kluis():
         try:
             output = function()
 
-            assert isinstance(output, int), f"Fout: {function.__name__}() geeft {type(output).__name__} in plaats van int"
+            assert isinstance(output, int), f"Fout: {function.__name__}() geeft {type(output).__name__} in plaats van int. Check evt. {__my_test_file()}"
             assert output in test.possible_outputs, f"Fout: {function.__name__}() geeft {output}, maar mogelijke outputs zijn alleen: {test.possible_outputs}"
 
             # if all possible safenumbers are positive, a new safenumber should be registered by now
@@ -214,6 +227,12 @@ def test_nieuwe_kluis():
                       f"daarna geeft aantal_kluizen_vrij() {free_safes} ipv {expected_free_safes}. Check evt. {__my_test_file()}"
 
                 assert free_safes == expected_free_safes, msg
+
+            if output >= 0:
+                msg = f"Fout: {function.__name__}() geeft aan dat kluis {output} gereserveerd is (ww: '{test.simulated_input[-1]}'), " \
+                      f"maar {__my_test_file()} bevat daarna geen regel met \"{output};{test.simulated_input[-1]}\"."
+
+                assert __check_line_in_testfile(f"{output};{test.simulated_input[-1]}"), msg
 
         except AssertionError as ae:
             raise AssertionError(f"{ae.args[0]}\n -> Info: gesimuleerde input voor deze test: {test.simulated_input}.") from ae
@@ -228,7 +247,9 @@ def test_kluis_openen():
     case = collections.namedtuple('case', 'safes simulated_input expected_output')
     testcases = [case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
-                 case(((11, "6754"), (12, "z@terd@g")), ["10", "6754"], False)]
+                 case(((11, "6754"), (12, "z@terd@g")), ["10", "6754"], False),
+                 case(((11, "geheim"),), ["1", "geheim"], False),
+                 case(((12, "geheim"),), ["2", "geheim"], False)]
 
     for test in testcases:
         __create_test_file(test.safes)
@@ -257,7 +278,9 @@ def test_kluis_teruggeven():
     testcases = [case((), ["1", "geheim"], False),
                  case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
-                 case(((11, "6754"),), ["11", "6754"], True)]
+                 case(((11, "6754"),), ["11", "6754"], True),
+                 case(((11, "geheim"),), ["1", "geheim"], False),
+                 case(((12, "geheim"),), ["2", "geheim"], False)]
 
     for test in testcases:
         __create_test_file(test.safes)
