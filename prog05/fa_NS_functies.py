@@ -32,8 +32,6 @@ def standaardprijs(afstandKM):
     Returns:
         float: De berekende standaardprijs.
     """
-    if afstandKM < 0:
-        return 0
     return
 
 
@@ -64,11 +62,10 @@ def ritprijs(leeftijd, weekendrit, afstandKM):
 def development_code():
     # Plaats hieronder code om je functies tussentijds te testen. Bijv:
     print("development printout:", standaardprijs(30))
-    print("development printout:", standaardprijs(-430))
 
 
 def module_runner():
-    #development_code()      # Comment deze regel om je 'development_code' uit te schakelen
+    development_code()      # Comment deze regel om je 'development_code' uit te schakelen
     __run_tests()           # Comment deze regel om de HU-tests uit te schakelen
 
 
