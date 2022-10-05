@@ -39,7 +39,7 @@ def nieuwe_kluis():
     om een kluiscode in te voeren. Deze kluiscode moet uit minimaal 4 tekens bestaan,
     en de puntkomma (';') mag er niet in voorkomen.
 
-    Als de puntkomma voorkomt in de kluiscode, is de returnwaarde van deze functie -1.
+    Als de kluiscode ongeldig is, is de returnwaarde van deze functie -1.
     Als er geen vrije kluizen meer zijn, is de returnwaarde van deze functie -2.
 
     Als er nog vrij kluizen zijn, en de kluiscode is geldig, dan koppelt deze functie
