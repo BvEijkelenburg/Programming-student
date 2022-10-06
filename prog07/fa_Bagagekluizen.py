@@ -245,7 +245,8 @@ def test_kluis_openen():
     function = kluis_openen
 
     case = collections.namedtuple('case', 'safes simulated_input expected_output')
-    testcases = [case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
+    testcases = [case(((11, "6754"), (12, "z@terd@g")), ["11", "1234"], False),
+                 case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["10", "6754"], False),
                  case(((11, "geheim"),), ["1", "geheim"], False),
@@ -275,7 +276,8 @@ def test_kluis_teruggeven():
     function = kluis_teruggeven
 
     case = collections.namedtuple('case', 'safes simulated_input expected_output')
-    testcases = [case((), ["1", "geheim"], False),
+    testcases = [case(((11, "6754"), (12, "z@terd@g")), ["11", "1234"], False),
+                 case((), ["1", "geheim"], False),
                  case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
                  case(((11, "6754"),), ["11", "6754"], True),
