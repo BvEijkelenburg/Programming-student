@@ -199,7 +199,8 @@ def test_nieuwe_kluis():
                        (2, "0000"), (4, "0000"), (6, "0000"), (9, "0000"), (11, "0000")), ["geheim"], [7]),
                  case(((2, "0000"), (4, "0000"), (6, "0000"), (8, "0000"), (10, "0000"), (12, "0000"),
                        (3, "0000"), (5, "0000"), (7, "0000"), (9, "0000"), (11, "0000")), ["geheim"], [1]),
-                 case(((1, "0000"), (3, "0000")), ["abc"], [-1])]
+                 case(((1, "0000"), (3, "0000")), ["abc"], [-1]),
+                 case(((1, "0000"), (3, "0000")), ["geheim;"], [-1])]
 
     for test in testcases:
         __create_test_file(test.safes)
@@ -250,7 +251,8 @@ def test_kluis_openen():
                  case(((11, "6754"), (12, "z@terd@g")), ["12", "z@terd@g"], True),
                  case(((11, "6754"), (12, "z@terd@g")), ["10", "6754"], False),
                  case(((11, "geheim"),), ["1", "geheim"], False),
-                 case(((12, "geheim"),), ["2", "geheim"], False)]
+                 case(((12, "geheim"),), ["2", "geheim"], False),
+                 case(((1, "1235"), (2, "6543"), (3, "7856")), ["1", "6543"], False)]
 
     for test in testcases:
         __create_test_file(test.safes)
@@ -282,7 +284,8 @@ def test_kluis_teruggeven():
                  case(((11, "6754"), (12, "z@terd@g")), ["11", "6754"], True),
                  case(((11, "6754"),), ["11", "6754"], True),
                  case(((11, "geheim"),), ["1", "geheim"], False),
-                 case(((12, "geheim"),), ["2", "geheim"], False)]
+                 case(((12, "geheim"),), ["2", "geheim"], False),
+                 case(((1, "1235"), (2, "6543"), (3, "7856")), ["1", "6543"], False)]
 
     for test in testcases:
         __create_test_file(test.safes)
