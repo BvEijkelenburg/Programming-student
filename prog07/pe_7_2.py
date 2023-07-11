@@ -8,7 +8,7 @@ import sys
 
 """
 Programming
-Practice Exercise 8.4
+Oefening PROG7.2
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
