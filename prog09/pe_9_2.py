@@ -5,7 +5,7 @@ import traceback, collections, random
 
 """
 Programming
-Oefening PROG9.2
+Practice Exercise 9.2
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
