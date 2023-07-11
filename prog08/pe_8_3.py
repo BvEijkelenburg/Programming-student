@@ -5,7 +5,7 @@ import traceback, collections
 
 """
 Programming
-Practice Exercise 7.1
+Practice Exercise 8.3
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
@@ -17,24 +17,27 @@ Voeg commentaar toe om je code toe te lichten.
 """
 
 
-def seizoen(maand):
+def hoogvliegers(dict_studenten_cijfers):
     """
-    Het functie-resultaat is het seizoen die bij het gegeven maandnummer hoort.
-    Nummers 3 t/m 5 horen bij 'lente', 9 t/m 11 bij ‘herfst’, etc.
+    De parameter is een dictionary met studentnamen als sleutels (keys),
+    en de cijfers (per student één cijfer) zijn de waarden (values). De
+    functie moet een nieuwe dictionary returnen, met daarin de namen (en
+    het cijfer) van studenten die een cijfer hoger dan 9,0 hebben.
 
-    Maandnummers < 1 of >= 13  leveren als resultaat de string 'ongeldig'.
+    Dus {"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Martin": 9.1} levert
+    als antwoord: {"Gerald": 9.5, "Martin": 9.1 }]
 
     Args:
-        maand (int): Een maandnummer waarvan het seizoen bepaald moet worden
+        dict_studenten_cijfers (dict): dictionary met resultaten
     Returns:
-        string: Het seizoen waarin de opgegeven maand valt, of 'ongeldig'
+        dict: dictionary met resultaten >= 9
     """
     return
 
 
 def development_code():
     # Plaats hieronder eventueel code om je functies tussentijds te testen. Bijv:
-    print("Seizoen van maand 2:", seizoen(2))
+    print("De hoogvliegers:", hoogvliegers({"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Martin": 9.0}))
 
 
 def module_runner():
@@ -75,21 +78,21 @@ def __my_assert_args(function, args, expected_output, check_type=False):
         assert output == expected_output, msg
 
 
-def test_seizoen():
-    case = collections.namedtuple('case', 'monthnumber expected_output')
+def test_hoogvliegers():
+    case = collections.namedtuple('case', 'result_dictionary expected_output')
 
-    testcases = [ case(-1, "ongeldig"), case(0, "ongeldig"), case(1, "winter"), case(2, "winter"),
-                  case(3, "lente"), case(4, "lente"), case(5, "lente"), case(6, "zomer"),
-                  case(7, "zomer"), case(8, "zomer"), case(9, "herfst"), case(10, "herfst"),
-                  case(11, "herfst"), case(12, "winter"), case(13, "ongeldig"), case(14, "ongeldig") ]
+    testcases = [case({"Gerald": 9.5, "Berend": 4.5, "Bart": 1.0, "Leo": 2.5, "Martin": 8.0, "Gera": 7.5, "Jan": 9.2, "David": 9.0, "Sanne": 8.2, "Brian": 10.0 }, {'Gerald': 9.5, 'Jan': 9.2, 'Brian': 10.0}),
+                 case({"Gerald": 1.0, "Berend": 3.5, "Bart": 2.0, "Leo": 3.5, "Martin": 7.0, "Gera": 4.5, "Jan": 8.2, "David": 8.1, "Sanne": 9.2, "Brian": 6.9}, {'Sanne': 9.2}),
+                 case({"Gerald": 9.4, "Berend": 8.5, "Bart": 4.0, "Leo": 9.5, "Martin": 5.0, "Gera": 3.5, "Jan": 6.2, "David": 4.8, "Sanne": 4.2, "Brian": 7.7}, {'Gerald': 9.4, 'Leo': 9.5}),
+                 case({"Gerald": 8.7, "Berend": 9.6, "Bart": 9.0, "Leo": 8.5, "Martin": 8.9, "Gera": 9.9, "Jan": 2.2, "David": 3.2, "Sanne": 5.2, "Brian": 4.5}, {'Berend': 9.6, 'Gera': 9.9})]
 
     for test in testcases:
-        __my_assert_args(seizoen, (test.monthnumber,), test.expected_output)
+        __my_assert_args(hoogvliegers, (test.result_dictionary,), test.expected_output)
 
 
 def __run_tests():
     """ Test alle functies. """
-    test_functions = [ test_seizoen ]
+    test_functions = [ test_hoogvliegers ]
 
     try:
         for test_function in test_functions:
