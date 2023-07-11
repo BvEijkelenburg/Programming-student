@@ -5,7 +5,7 @@ import traceback, collections
 
 """
 Programming
-Oefening PROG4.2
+Practice Exercise 5.2
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)

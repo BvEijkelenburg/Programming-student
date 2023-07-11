@@ -5,7 +5,7 @@ import traceback, collections
 
 """
 Programming
-Oefening PROG4.7
+Final assignment 2: NS-functies
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
@@ -14,7 +14,17 @@ Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
 Opdracht:
 Werk onderstaande functies uit.
 Voeg commentaar toe om je code toe te lichten.
+Lever je werk in op Canvas als alle tests slagen.
 """
+
+
+""" 
+In de testcases van deze opdracht (zie functie test_ritprijs) ontbreken nog twee testcases. 
+Pas de waarden hieronder aan naar waarden die bij de ontbrekende testcases horen!
+Ze worden automatisch aan de overige tests toegevoegd! """
+
+ontbrekendeTestcase1 = 11, True, 50, 26.0     # leeftijd, weekendrit, afstand, antwoord
+ontbrekendeTestcase2 = 11, True, 50, 26.0     # leeftijd, weekendrit, afstand, antwoord
 
 
 def standaardprijs(afstandKM):
@@ -117,11 +127,24 @@ def test_ritprijs():
     testcases = [ case(11, True,  50, 26.0),  case(11, False,  50, 28.0), case(11, True,  51, 29.64),
                   case(11, False, 51, 31.92), case(11, True, -51,  0.0),  case(11, False, -51,  0.0),
                   case(12, True,  50, 24.0),  case(12, False, 50, 40.0),  case(12, True,  51, 27.36),
-                  case(12, False, 51, 45.6),  case(12, True, -51,  0.0),  case(12, False, -51, 0.0),
+                  case(12, False,  51, 45.6), case(12, True, -51,  0.0),  case(12, False, -51, 0.0),
                   case(64, True,  50, 24.0),  case(64, False,  50, 40.0), case(64, True,  51, 27.36),
                   case(64, False, 51, 45.6),  case(64, True, -51,  0.0),  case(64, False, -51,  0.0),
                   case(65, True,  50, 26.0),  case(65, False, 50, 28.0),  case(65, True,  51, 29.64),
-                  case(65, False, 51, 31.92) ]
+                  case(65, False,  51, 31.92) ]
+
+    def checkAndInsertTestcase(test):
+        if (isinstance(test, tuple) and len(test) == 4 and isinstance(test[0], int) and
+                isinstance(test[1], bool) and isinstance(test[2], (int, float)) and isinstance(test[3], (int, float))):
+            testcases.insert(0, case(*test))
+            return True
+        return False
+
+    if not checkAndInsertTestcase(ontbrekendeTestcase1):
+        print("ontbrekendeTestcase1 is geen tuple(number, bool, number, number)!")
+
+    if not checkAndInsertTestcase(ontbrekendeTestcase2):
+        print("ontbrekendeTestcase2 is geen tuple(number, bool, number, number)!")
 
     for test in testcases:
         __my_assert_args(ritprijs, (test.age, test.weekend, test.distance), test.expected_output)
