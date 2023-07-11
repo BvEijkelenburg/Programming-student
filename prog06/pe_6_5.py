@@ -5,7 +5,7 @@ import traceback, builtins, collections
 
 """
 Programming
-Oefening PROG5.1
+Practice Exercise 6.5
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)

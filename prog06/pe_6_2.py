@@ -5,7 +5,7 @@ import traceback, builtins, sys
 
 """
 Programming
-Oefening PROG5.2
+Practice Exercise 6.2
 (c) 2021 Hogeschool Utrecht,
 Tijmen Muller en 
 Bart van Eijkelenburg (bart.vaneijkelenburg@hu.nl)
